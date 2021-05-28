@@ -11,7 +11,16 @@ export class ProductListComponent implements OnInit {
   imageWidth: number = 50;
   imageMargin: number = 2;
   showImage: boolean = false;
-  listFilter: string = '';
+
+  private _listFilter: string = '';
+  get listFilter(): string {
+    return this._listFilter;
+  }
+  set listFilter(value: string) {
+    this.filteredProducts = this.performFilter(value);
+    this._listFilter = value;
+  }
+
   products: IProduct[] = [
     {
       productId: 1,
@@ -44,6 +53,7 @@ export class ProductListComponent implements OnInit {
       imageUrl: 'assets/images/hammer.png',
     },
   ];
+  filteredProducts: IProduct[] = this.products;
 
   constructor() {}
 
@@ -51,5 +61,11 @@ export class ProductListComponent implements OnInit {
 
   toggleImage(): void {
     this.showImage = !this.showImage;
+  }
+
+  performFilter(searchString: string): IProduct[] {
+    return this.products.filter((product: IProduct) =>
+      product.productName.toLowerCase().includes(searchString.toLowerCase())
+    );
   }
 }
