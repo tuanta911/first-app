@@ -68,4 +68,8 @@ export class ProductListComponent implements OnInit {
       product.productName.toLowerCase().includes(searchString.toLowerCase())
     );
   }
+
+  onNotify(messange: string, productName: string): void {
+    this.pageTitle = productName + ' was click!!!';
+  }
 }
