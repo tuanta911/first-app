@@ -19,6 +19,13 @@ export class ProductService {
     );
   }
 
+  getProductById(id: number): Observable<IProduct> {
+    return this.http.get<IProduct>(this.productURL).pipe(
+      tap((data) => data.productId == id),
+      catchError(this.handleError)
+    );
+  }
+
   private handleError(err: HttpErrorResponse): Observable<never> {
     let errorMessage = '';
     if (err.error instanceof ErrorEvent) {
