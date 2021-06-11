@@ -21,27 +21,35 @@ import { ProductEditInfoComponent } from './product-edit/product-edit-info/produ
   imports: [
     FormsModule,
     RouterModule.forChild([
-      { path: 'products', component: ProductListComponent },
       {
-        path: 'products/:id',
-        canActivate: [ProductDetailGuard],
-        component: ProductDetailComponent,
-        resolve: { resolveData: ProductResolver },
-      },
-      {
-        path: 'products/:id/edit',
-        component: ProductEditComponent,
-        resolve: { resolveData: ProductResolver },
+        path: 'products',
         children: [
-          { path: '', redirectTo: 'info', pathMatch: 'full' },
           {
-            path: 'info',
-            component: ProductEditInfoComponent,
-            resolve: { product: ProductResolver },
+            path: '',
+            component: ProductListComponent,
           },
           {
-            path: 'tags',
-            component: ProductEditTagsComponent,
+            path: ':id',
+            canActivate: [ProductDetailGuard],
+            component: ProductDetailComponent,
+            resolve: { resolveData: ProductResolver },
+          },
+          {
+            path: ':id/edit',
+            component: ProductEditComponent,
+            resolve: { resolveData: ProductResolver },
+            children: [
+              { path: '', redirectTo: 'info', pathMatch: 'full' },
+              {
+                path: 'info',
+                component: ProductEditInfoComponent,
+                resolve: { product: ProductResolver },
+              },
+              {
+                path: 'tags',
+                component: ProductEditTagsComponent,
+              },
+            ],
           },
         ],
       },

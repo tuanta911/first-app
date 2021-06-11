@@ -13,7 +13,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 })
 export class ProductService {
   private productURL = 'api/products';
-  private idDelete = [];
+  private idCounter: number = 11;
 
   constructor(private http: HttpClient) {}
 
@@ -29,7 +29,8 @@ export class ProductService {
 
   createProduct(product: IProduct): Observable<IProduct> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    product.id = 11;
+    product.id = this.idCounter;
+    this.idCounter++;
     return this.http.post<IProduct>(this.productURL, product, { headers }).pipe(
       tap((data) => console.log('createProduct: ' + JSON.stringify(data))),
       catchError(this.handleError)

@@ -9,9 +9,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ProductDetailComponent implements OnInit {
   private _productService: ProductService;
-  product: IProduct | undefined;
+  product: IProduct = {
+    id: 0,
+    productName: '',
+    productCode: '',
+    releaseDate: '',
+    price: 0,
+    description: '',
+    starRating: 0,
+    imageUrl: '',
+    Category: '',
+  };
   id: number = 0;
   errorMessage?: string;
+  pageTitle: string = 'Detail of Product : ';
   constructor(
     private route: ActivatedRoute,
     productService: ProductService,
@@ -31,7 +42,12 @@ export class ProductDetailComponent implements OnInit {
     const resolveData: ProductResolved =
       this.route.snapshot.data['resolveData'];
     this.errorMessage = resolveData.error;
-    this.product = resolveData.product;
+    if (resolveData.product != undefined) {
+      this.product = resolveData.product;
+      this.pageTitle += this.product.productName;
+    } else {
+      this.router.navigate(['**']);
+    }
   }
 
   onBack(): void {
