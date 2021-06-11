@@ -1,6 +1,10 @@
 import { IProduct } from './iproduct';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
@@ -8,7 +12,7 @@ import { catchError, map, tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ProductService {
-  private productURL = 'api/products/products.json';
+  private productURL = 'api/products';
 
   constructor(private http: HttpClient) {}
 
@@ -22,6 +26,35 @@ export class ProductService {
   getProductById(id: number): Observable<IProduct | undefined> {
     return this.getProduct().pipe(
       map((product: IProduct[]) => product.find((x) => x.productId === id))
+    );
+  }
+
+  createProduct(product: IProduct): Observable<IProduct> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    product.productId = undefined;
+    return this.http.post<IProduct>(this.productURL, product, { headers }).pipe(
+      tap((data) => console.log('createProduct: ' + JSON.stringify(data))),
+      catchError(this.handleError)
+    );
+  }
+
+  deleteProduct(id: number | undefined): Observable<{}> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = `${this.productURL}/${id}`;
+    return this.http.delete<IProduct>(url, { headers }).pipe(
+      tap((data) => console.log('deleteProduct: ' + id)),
+      catchError(this.handleError)
+    );
+  }
+
+  updateProduct(product: IProduct): Observable<IProduct> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = `${this.productURL}/${product.productId}`;
+    return this.http.put<IProduct>(url, product, { headers }).pipe(
+      tap(() => console.log('updateProduct: ' + product.productId)),
+      // Return the product on an update
+      map(() => product),
+      catchError(this.handleError)
     );
   }
 
