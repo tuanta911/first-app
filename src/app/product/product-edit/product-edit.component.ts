@@ -11,7 +11,7 @@ import { IProduct, ProductResolved } from '../iproduct';
 export class ProductEditComponent implements OnInit {
   pageTitle: string = 'Edit Product';
   product: IProduct = {
-    productId: 0,
+    id: 0,
     productName: '',
     productCode: '',
     releaseDate: '',
@@ -42,7 +42,7 @@ export class ProductEditComponent implements OnInit {
 
   onProductRetrieved(product: IProduct | undefined): void {
     this.product = product == undefined ? this.product : product;
-    if (this.product.productId == 0) {
+    if (this.product.id == 0) {
       this.pageTitle = 'Add new Product';
     } else {
       this.pageTitle = 'Edit Product ' + this.product.productName;
@@ -62,7 +62,7 @@ export class ProductEditComponent implements OnInit {
 
   saveProduct(): void {
     if (this.isValid()) {
-      if (this.product.productId === 0) {
+      if (this.product.id === 0) {
         this.productService.createProduct(this.product).subscribe({
           next: () =>
             this.onSaveComplete(
@@ -85,12 +85,12 @@ export class ProductEditComponent implements OnInit {
   }
 
   deleteProduct(): void {
-    if (this.product.productId === 0) {
+    if (this.product.id === 0) {
       // Don't delete, it was never saved.
       this.onSaveComplete(`${this.product.productName} was deleted`);
-    } else {
+    } else if (this.product.id != undefined) {
       if (confirm(`Really delete the product: ${this.product.productName}?`)) {
-        this.productService.deleteProduct(this.product.productId).subscribe({
+        this.productService.deleteProduct(this.product.id).subscribe({
           next: () =>
             this.onSaveComplete(`${this.product.productName} was deleted`),
           error: (err) => (this.errorMessage = err),
@@ -118,7 +118,6 @@ export class ProductEditComponent implements OnInit {
   validate(): void {
     // Clear the validation object
     this.dataIsValid = {};
-
     // 'info' tab
     if (
       this.product.productName &&

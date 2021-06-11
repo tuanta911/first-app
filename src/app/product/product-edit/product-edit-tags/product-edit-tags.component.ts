@@ -11,8 +11,8 @@ export class ProductEditTagsComponent implements OnInit {
   errorMessage?: string;
   newTags = '';
   product: IProduct = {
-    productId: 0,
-    productName: 'test',
+    id: 0,
+    productName: '',
     productCode: '',
     releaseDate: '',
     price: 0,
@@ -25,7 +25,9 @@ export class ProductEditTagsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.parent?.data.subscribe((data) => {
-      this.product = data['resolveData'].product;
+      if (data['resolveData'].product != undefined) {
+        this.product = data['resolveData'].product;
+      }
     });
   }
 

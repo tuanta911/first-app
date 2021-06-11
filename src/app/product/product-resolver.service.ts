@@ -27,6 +27,23 @@ export class ProductResolver implements Resolve<ProductResolved> {
       return of({ product: undefined, error: message });
     }
 
+    if (id == 0) {
+      return of({
+        product: {
+          id: 0,
+          productName: '',
+          productCode: '',
+          releaseDate: '',
+          price: 0,
+          description: '',
+          starRating: 0,
+          imageUrl: '',
+          Category: '',
+        },
+        error: '',
+      });
+    }
+
     return this.productService.getProductById(id).pipe(
       map(
         (product) => ({ product }),

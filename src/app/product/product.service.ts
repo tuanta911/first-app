@@ -13,32 +13,30 @@ import { catchError, map, tap } from 'rxjs/operators';
 })
 export class ProductService {
   private productURL = 'api/products';
+  private idDelete = [];
 
   constructor(private http: HttpClient) {}
 
   getProduct(): Observable<IProduct[]> {
-    return this.http.get<IProduct[]>(this.productURL).pipe(
-      tap((data) => console.log('All', JSON.stringify(data))),
-      catchError(this.handleError)
-    );
+    return this.http.get<IProduct[]>(this.productURL);
   }
 
   getProductById(id: number): Observable<IProduct | undefined> {
     return this.getProduct().pipe(
-      map((product: IProduct[]) => product.find((x) => x.productId === id))
+      map((product: IProduct[]) => product.find((x) => x.id === id))
     );
   }
 
   createProduct(product: IProduct): Observable<IProduct> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    product.productId = undefined;
+    product.id = 11;
     return this.http.post<IProduct>(this.productURL, product, { headers }).pipe(
       tap((data) => console.log('createProduct: ' + JSON.stringify(data))),
       catchError(this.handleError)
     );
   }
 
-  deleteProduct(id: number | undefined): Observable<{}> {
+  deleteProduct(id: number): Observable<{}> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const url = `${this.productURL}/${id}`;
     return this.http.delete<IProduct>(url, { headers }).pipe(
@@ -49,9 +47,9 @@ export class ProductService {
 
   updateProduct(product: IProduct): Observable<IProduct> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const url = `${this.productURL}/${product.productId}`;
+    const url = `${this.productURL}/${product.id}`;
     return this.http.put<IProduct>(url, product, { headers }).pipe(
-      tap(() => console.log('updateProduct: ' + product.productId)),
+      tap(() => console.log('updateProduct: ' + product.id)),
       // Return the product on an update
       map(() => product),
       catchError(this.handleError)

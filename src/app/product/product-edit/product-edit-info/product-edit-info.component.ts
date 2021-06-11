@@ -12,7 +12,7 @@ import { NgForm } from '@angular/forms';
 export class ProductEditInfoComponent implements OnInit {
   @ViewChild(NgForm) productForm?: NgForm;
   product: IProduct = {
-    productId: 0,
+    id: 0,
     productName: '',
     productCode: '',
     releaseDate: '',
@@ -23,6 +23,7 @@ export class ProductEditInfoComponent implements OnInit {
     Category: '',
   };
   errorMessage?: string;
+  test: string = 'sdfasf';
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
@@ -31,7 +32,9 @@ export class ProductEditInfoComponent implements OnInit {
         this.productForm.reset();
       }
 
-      this.product = data['resolveData'].product;
+      if (data['resolveData'].product != undefined) {
+        this.product = data['resolveData'].product;
+      }
     });
   }
 }
