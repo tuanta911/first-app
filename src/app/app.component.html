@@ -7,12 +7,19 @@
       >
     </li>
     <li class="nav-item">
-      <a class="nav-link" routerLinkActive="active" routerLink="/products"
+      <a
+        class="nav-link"
+        routerLinkActive="active"
+        routerLink="/products"
+        [routerLinkActiveOptions]="{ exact: true }"
         >Product List</a
       >
     </li>
     <li class="nav-item">
-      <a class="nav-link" [routerLink]="['/products', 0, 'edit']"
+      <a
+        class="nav-link"
+        routerLinkActive="active"
+        [routerLink]="['/products', 0, 'edit']"
         >Add Product</a
       >
     </li>
@@ -32,6 +39,9 @@
     </li>
   </ul>
 </nav>
-<div class="container">
-  <router-outlet></router-outlet>
+<div
+  class="container"
+  [@slideInAnimation]="o.isActivated ? o.activatedRoute : ''"
+>
+  <router-outlet #o="outlet"></router-outlet>
 </div>
