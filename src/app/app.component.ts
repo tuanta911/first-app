@@ -1,3 +1,4 @@
+import { MessageService } from './message/message.service';
 import { dashCaseToCamelCase } from '@angular/compiler/src/util';
 import { Component } from '@angular/core';
 import {
@@ -22,10 +23,14 @@ export class AppComponent {
   isLoggedIn: boolean = false;
   loading: boolean = true;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private messageService: MessageService) {
     router.events.subscribe((routerEvent: Event) => {
       this.checkRouterEvent(routerEvent);
     });
+  }
+
+  IsMessageDisplayed(): boolean{
+    return this.messageService.isDisplayed;
   }
 
   logOut(): void {
@@ -44,5 +49,9 @@ export class AppComponent {
     ) {
       this.loading = false;
     }
+  }
+
+  ClickMessage(): void{
+    this.messageService.isDisplayed = !this.messageService.isDisplayed
   }
 }

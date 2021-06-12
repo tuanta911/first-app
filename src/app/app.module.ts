@@ -1,3 +1,4 @@
+import { MessageModule } from './message/message.module';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -20,6 +21,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     BrowserModule,
     HttpClientModule,
     ProductModule,
+    MessageModule,
     InMemoryWebApiModule.forRoot(ProductData, { delay: 1000 }),
     RouterModule.forRoot([
       { path: 'welcome', component: WelcomeComponent },
