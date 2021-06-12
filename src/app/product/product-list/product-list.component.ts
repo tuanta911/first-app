@@ -1,14 +1,14 @@
-import { ProductService } from './../product.service';
-import { IProduct } from './../iproduct';
+import { IProduct, ProductListResolved } from './../iproduct';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
 })
-export class ProductListComponent implements OnInit, OnDestroy {
+export class ProductListComponent implements OnInit {
   pageTitle = 'Product List';
   imageWidth: number = 50;
   imageMargin: number = 2;
@@ -16,7 +16,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   errorMessage = '';
   sub!: Subscription;
 
-  private _productService;
   private _listFilter: string = '';
   get listFilter(): string {
     return this._listFilter;
@@ -29,20 +28,20 @@ export class ProductListComponent implements OnInit, OnDestroy {
   products: IProduct[] = [];
   filteredProducts: IProduct[] = this.products;
 
-  constructor(productService: ProductService) {
-    this._productService = productService;
-  }
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
-  }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.sub = this._productService.getProduct().subscribe({
-      next: (productData) => {
-        this.products = productData;
-        this.filteredProducts = productData;
-      },
-      error: (err) => (this.errorMessage = err),
+    this.route.data.subscribe((data) => {
+      const resolveData: ProductListResolved = data['resolveData'];
+      this.products =
+        resolveData.listProduct == undefined
+          ? this.products
+          : resolveData.listProduct;
+      this.filteredProducts =
+        resolveData.listProduct == undefined
+          ? this.products
+          : resolveData.listProduct;
+      this.errorMessage = resolveData.error;
     });
   }
 
