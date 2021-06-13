@@ -5,18 +5,17 @@ import { MessageService } from './message.service';
 @Component({
   selector: 'app-message',
   templateUrl: './message.component.html',
-  styleUrls: ['./message.component.css']
+  styleUrls: ['./message.component.css'],
 })
 export class MessageComponent implements OnInit {
   messages: string[] = this.messageService.messages;
 
-  constructor(private messageService: MessageService, private router: Router) { }
+  constructor(private messageService: MessageService, private router: Router) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  close(): void{
-    this.router.navigate([{outlets: {popup: null}}]);
+  close(): void {
+    this.router.navigate([{ outlets: { popup: null } }]);
     this.messageService.isDisplayed = false;
   }
 }

@@ -1,4 +1,3 @@
-import { MessageModule } from './message/message.module';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -14,6 +13,10 @@ import { WelcomeComponent } from './home/welcome.component';
 import { ProductModule } from './product/product.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
+//feature
+import { UserModule } from './user/user.module';
+import { MessageModule } from './message/message.module';
+
 @NgModule({
   declarations: [AppComponent, WelcomeComponent, PageNotFoundComponent],
   imports: [
@@ -22,6 +25,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     HttpClientModule,
     ProductModule,
     MessageModule,
+    UserModule,
     InMemoryWebApiModule.forRoot(ProductData, { delay: 1000 }),
     RouterModule.forRoot([
       { path: 'welcome', component: WelcomeComponent },

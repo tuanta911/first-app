@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MessageService {
   private _messages: string[] = [];
@@ -11,8 +11,12 @@ export class MessageService {
     return this._messages;
   }
 
-  addMessage(message: string): void {
+  addMessage(message: string, showTime?: boolean): void {
     const currentDate = new Date();
-    this.messages.unshift(message + ' at ' + currentDate.toLocaleString());
+    if (showTime) {
+      this.messages.unshift(message);
+    } else {
+      this.messages.unshift(message + ' at ' + currentDate.toLocaleString());
+    }
   }
 }
