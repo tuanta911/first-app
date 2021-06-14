@@ -1,22 +1,25 @@
 import { WelcomeComponent } from './home/welcome.component';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 import { AuthGuard } from './user/auth.guard';
 
-const routes: Routes = [
-  { path: 'welcome', component: WelcomeComponent },
-  {
-    path: 'products',
-    canLoad: [AuthGuard],
-    loadChildren: () =>
-      import('./product/product.module').then((m) => m.ProductModule),
-  },
-  { path: '', redirectTo: 'welcome', pathMatch: 'full' },
-  { path: '**', component: WelcomeComponent },
-];
-
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(
+      [
+        { path: 'welcome', component: WelcomeComponent },
+        {
+          path: 'products',
+          canActivate: [AuthGuard],
+          loadChildren: () =>
+            import('./product/product.module').then((m) => m.ProductModule),
+        },
+        { path: '', redirectTo: 'welcome', pathMatch: 'full' },
+        { path: '**', component: WelcomeComponent },
+      ],
+      { preloadingStrategy: PreloadAllModules }
+    ),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
