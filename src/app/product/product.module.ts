@@ -1,6 +1,7 @@
+import { ProductEidtGuard } from './product-edit/product-eidt.guard';
 import { AuthGuard } from './../user/auth.guard';
 import { ProductListResolverService } from './product-list-resolver.service';
-import { RouterModule, CanActivate } from '@angular/router';
+import { RouterModule, CanActivate, CanDeactivate } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
@@ -42,6 +43,7 @@ import { ProductEditInfoComponent } from './product-edit/product-edit-info/produ
             path: ':id/edit',
             component: ProductEditComponent,
             resolve: { resolveData: ProductResolver },
+            canDeactivate: [ProductEidtGuard],
             children: [
               { path: '', redirectTo: 'info', pathMatch: 'full' },
               {

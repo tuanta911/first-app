@@ -10,17 +10,30 @@ import { IProduct, ProductResolved } from '../iproduct';
 })
 export class ProductEditComponent implements OnInit {
   pageTitle: string = 'Edit Product';
-  product: IProduct = {
-    id: 0,
-    productName: '',
-    productCode: '',
-    releaseDate: '',
-    price: 0,
-    description: '',
-    starRating: 0,
-    imageUrl: '',
-    Category: '',
-  };
+  private currentProduct?: IProduct;
+  private originalProduct?: IProduct;
+
+  get product(): IProduct {
+    return this.currentProduct == undefined
+      ? this.productService.IntProduct()
+      : this.currentProduct;
+  }
+
+  set product(value: IProduct) {
+    this.currentProduct = value;
+    this.originalProduct = { ...value };
+  }
+
+  get isDirty(): boolean {
+    console.log(this.originalProduct);
+    console.log(this.currentProduct);
+
+    return (
+      JSON.stringify(this.originalProduct) !=
+      JSON.stringify(this.currentProduct)
+    );
+  }
+
   errorMessage?: string;
   private dataIsValid: { [key: string]: boolean } = {};
 
@@ -111,8 +124,8 @@ export class ProductEditComponent implements OnInit {
 
   reset(): void {
     this.dataIsValid = {};
-    //this.currentProduct = null;
-    //this.originalProduct = null;
+    this.currentProduct = undefined;
+    this.originalProduct = undefined;
   }
 
   validate(): void {

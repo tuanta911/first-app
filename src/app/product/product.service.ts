@@ -17,6 +17,20 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
+  IntProduct(): IProduct {
+    return {
+      id: 0,
+      productName: '',
+      productCode: '',
+      releaseDate: '',
+      price: 0,
+      description: '',
+      starRating: 0,
+      imageUrl: '',
+      Category: '',
+    };
+  }
+
   getProduct(): Observable<IProduct[]> {
     return this.http.get<IProduct[]>(this.productURL);
   }
