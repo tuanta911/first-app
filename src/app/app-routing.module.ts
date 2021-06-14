@@ -1,12 +1,16 @@
-import { ProductDetailGuard } from './product/product-detail/product-detail.guard';
 import { WelcomeComponent } from './home/welcome.component';
-import { ProductDetailComponent } from './product/product-detail/product-detail.component';
-import { ProductListComponent } from './product/product-list/product-list.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './user/auth.guard';
 
 const routes: Routes = [
   { path: 'welcome', component: WelcomeComponent },
+  {
+    path: 'products',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./product/product.module').then((m) => m.ProductModule),
+  },
   { path: '', redirectTo: 'welcome', pathMatch: 'full' },
   { path: '**', component: WelcomeComponent },
 ];

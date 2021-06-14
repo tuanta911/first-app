@@ -1,5 +1,4 @@
 import { ProductEidtGuard } from './product-edit/product-eidt.guard';
-import { AuthGuard } from './../user/auth.guard';
 import { ProductListResolverService } from './product-list-resolver.service';
 import { RouterModule, CanActivate, CanDeactivate } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -25,37 +24,31 @@ import { ProductEditInfoComponent } from './product-edit/product-edit-info/produ
     FormsModule,
     RouterModule.forChild([
       {
-        path: 'products',
-        canActivate: [AuthGuard],
+        path: '',
+        component: ProductListComponent,
+        resolve: { resolveData: ProductListResolverService },
+      },
+      {
+        path: ':id',
+        component: ProductDetailComponent,
+        canActivate: [ProductDetailGuard],
+        resolve: { resolveData: ProductResolver },
+      },
+      {
+        path: ':id/edit',
+        component: ProductEditComponent,
+        resolve: { resolveData: ProductResolver },
+        canDeactivate: [ProductEidtGuard],
         children: [
+          { path: '', redirectTo: 'info', pathMatch: 'full' },
           {
-            path: '',
-            component: ProductListComponent,
-            resolve: { resolveData: ProductListResolverService },
+            path: 'info',
+            component: ProductEditInfoComponent,
+            resolve: { product: ProductResolver },
           },
           {
-            path: ':id',
-            component: ProductDetailComponent,
-            canActivate: [ProductDetailGuard],
-            resolve: { resolveData: ProductResolver },
-          },
-          {
-            path: ':id/edit',
-            component: ProductEditComponent,
-            resolve: { resolveData: ProductResolver },
-            canDeactivate: [ProductEidtGuard],
-            children: [
-              { path: '', redirectTo: 'info', pathMatch: 'full' },
-              {
-                path: 'info',
-                component: ProductEditInfoComponent,
-                resolve: { product: ProductResolver },
-              },
-              {
-                path: 'tags',
-                component: ProductEditTagsComponent,
-              },
-            ],
+            path: 'tags',
+            component: ProductEditTagsComponent,
           },
         ],
       },

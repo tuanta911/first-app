@@ -7,10 +7,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { ProductData } from './product/product-data';
 
-//import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WelcomeComponent } from './home/welcome.component';
-import { ProductModule } from './product/product.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 //feature
@@ -23,15 +22,10 @@ import { MessageModule } from './message/message.module';
     BrowserAnimationsModule,
     BrowserModule,
     HttpClientModule,
-    ProductModule,
     MessageModule,
     UserModule,
     InMemoryWebApiModule.forRoot(ProductData, { delay: 1000 }),
-    RouterModule.forRoot([
-      { path: 'welcome', component: WelcomeComponent },
-      { path: '', redirectTo: 'welcome', pathMatch: 'full' },
-      { path: '**', component: PageNotFoundComponent },
-    ]),
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
