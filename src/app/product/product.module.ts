@@ -25,6 +25,7 @@ import { ProductEditInfoComponent } from './product-edit/product-edit-info/produ
     RouterModule.forChild([
       {
         path: 'products',
+        canActivate: [AuthGuard],
         children: [
           {
             path: '',
@@ -33,8 +34,8 @@ import { ProductEditInfoComponent } from './product-edit/product-edit-info/produ
           },
           {
             path: ':id',
-            canActivate: [ProductDetailGuard, AuthGuard],
             component: ProductDetailComponent,
+            canActivate: [ProductDetailGuard],
             resolve: { resolveData: ProductResolver },
           },
           {

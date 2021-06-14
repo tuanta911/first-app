@@ -1,3 +1,4 @@
+import { AuthService } from './user/auth.service';
 import { MessageService } from './message/message.service';
 import { dashCaseToCamelCase } from '@angular/compiler/src/util';
 import { Component } from '@angular/core';
@@ -23,21 +24,27 @@ export class AppComponent {
   isLoggedIn: boolean = false;
   loading: boolean = true;
 
-  constructor(private router: Router, private messageService: MessageService) {
+  constructor(
+    private router: Router,
+    private messageService: MessageService,
+    private authService: AuthService
+  ) {
     router.events.subscribe((routerEvent: Event) => {
       this.checkRouterEvent(routerEvent);
     });
   }
 
-  IsMessageDisplayed(): boolean{
+  IsMessageDisplayed(): boolean {
     return this.messageService.isDisplayed;
   }
 
   logOut(): void {
+    this.authService.logout();
     this.router.navigate(['/welcome']);
   }
 
   checkRouterEvent(routerEvent: Event): void {
+    this.isLoggedIn = this.authService.isLoggedIn;
     if (routerEvent instanceof NavigationStart) {
       this.loading = true;
     }
@@ -51,7 +58,7 @@ export class AppComponent {
     }
   }
 
-  ClickMessage(): void{
-    this.messageService.isDisplayed = !this.messageService.isDisplayed
+  ClickMessage(): void {
+    this.messageService.isDisplayed = !this.messageService.isDisplayed;
   }
 }
