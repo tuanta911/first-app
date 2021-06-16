@@ -1,6 +1,13 @@
+import { ProductParameterService } from './../product-parameter.service';
 import { CriteriaComponent } from './../../shared/criteria/criteria.component';
 import { IProduct, ProductListResolved } from './../iproduct';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
@@ -13,7 +20,6 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   pageTitle = 'Product List';
   imageWidth: number = 50;
   imageMargin: number = 2;
-  showImage: boolean = false;
   errorMessage = '';
   includeDetail: boolean = true;
   sub!: Subscription; // hold the supcription, using to check is we subcribe element or not, if yes don't supcribe again
@@ -22,9 +28,22 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   products: IProduct[] = [];
   filteredProducts: IProduct[] = this.products;
 
-  constructor(private route: ActivatedRoute) {}
+  get showImage(): boolean {
+    return this.productParameterService.showImage;
+  }
+  set showImage(value: boolean) {
+    this.productParameterService.showImage = value;
+  }
+
+  constructor(
+    private route: ActivatedRoute,
+    private productParameterService: ProductParameterService
+  ) {}
+
   ngAfterViewInit(): void {
-    console.log(this.filterCriteria?.listFilter);
+    if (this.filterCriteria != undefined) {
+      this.filterCriteria.listFilter = this.productParameterService.filterBy;
+    }
   }
 
   ngOnInit(): void {
@@ -43,11 +62,13 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   }
 
   onSearchValueChange(value: string): void {
+    this.productParameterService.filterBy = value;
     this.filteredProducts = this.performFilter(value);
   }
 
   toggleImage(): void {
     this.showImage = !this.showImage;
+    this.productParameterService.showImage = this.showImage;
   }
 
   performFilter(searchString: string): IProduct[] {

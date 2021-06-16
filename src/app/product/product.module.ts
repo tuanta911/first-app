@@ -1,3 +1,4 @@
+import { ProductParameterService } from './product-parameter.service';
 import { ProductEidtGuard } from './product-edit/product-eidt.guard';
 import { ProductListResolverService } from './product-list-resolver.service';
 import { RouterModule, CanActivate, CanDeactivate } from '@angular/router';
@@ -55,5 +56,6 @@ import { ProductEditInfoComponent } from './product-edit/product-edit-info/produ
     ]),
     ShareModule,
   ],
+  providers: [ProductParameterService],
 })
 export class ProductModule {}
