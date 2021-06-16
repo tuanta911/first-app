@@ -4,11 +4,8 @@
   </div>
   <div class="card-body">
     <div class="row">
-      <app-criteria
-        class="col-md-10"
-        [displayDetail]="includeDetail"
-        [hitCount]="filteredProducts.length"
-      ></app-criteria>
+      <app-criteria #filterCriteria class="col-md-10" [displayDetail]="includeDetail"
+        (valueChange)='onSearchValueChange($event)' [hitCount]="filteredProducts.length"></app-criteria>
     </div>
 
     <div class="table-responsive">
@@ -31,33 +28,22 @@
         <tbody>
           <tr *ngFor="let product of filteredProducts">
             <td>
-              <img
-                *ngIf="showImage"
-                [src]="product.imageUrl"
-                [title]="product.productName"
-                [style.width.px]="imageWidth"
-                [style.margin.px]="imageMargin"
-              />
+              <img *ngIf="showImage" [src]="product.imageUrl" [title]="product.productName"
+                [style.width.px]="imageWidth" [style.margin.px]="imageMargin" />
             </td>
             <td>
               <a [routerLink]="['/products', product.id]">{{
                 product.productName
-              }}</a>
+                }}</a>
             </td>
             <td>{{ product.productCode | lowercase | convertToSpace: "-" }}</td>
             <td>{{ product.releaseDate | date }}</td>
             <td>{{ product.price | currency: "VND":"symbol":"1.2-2" }}</td>
             <td>
-              <app-star
-                [rating]="product.starRating"
-                (notify)="onNotify($event, product.productName)"
-              ></app-star>
+              <app-star [rating]="product.starRating" (notify)="onNotify($event, product.productName)"></app-star>
             </td>
             <td>
-              <button
-                class="btn btn-outline-primary btn-sm"
-                [routerLink]="[product.id, 'edit']"
-              >
+              <button class="btn btn-outline-primary btn-sm" [routerLink]="[product.id, 'edit']">
                 Edit
               </button>
             </td>

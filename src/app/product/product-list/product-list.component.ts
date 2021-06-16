@@ -1,5 +1,6 @@
+import { CriteriaComponent } from './../../shared/criteria/criteria.component';
 import { IProduct, ProductListResolved } from './../iproduct';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
@@ -8,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, AfterViewInit {
   pageTitle = 'Product List';
   imageWidth: number = 50;
   imageMargin: number = 2;
@@ -16,11 +17,15 @@ export class ProductListComponent implements OnInit {
   errorMessage = '';
   includeDetail: boolean = true;
   sub!: Subscription; // hold the supcription, using to check is we subcribe element or not, if yes don't supcribe again
+  @ViewChild('filterCriteria') filterCriteria: CriteriaComponent | undefined;
 
   products: IProduct[] = [];
   filteredProducts: IProduct[] = this.products;
 
   constructor(private route: ActivatedRoute) {}
+  ngAfterViewInit(): void {
+    console.log(this.filterCriteria?.listFilter);
+  }
 
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
@@ -35,6 +40,10 @@ export class ProductListComponent implements OnInit {
           : resolveData.listProduct;
       this.errorMessage = resolveData.error;
     });
+  }
+
+  onSearchValueChange(value: string): void {
+    this.filteredProducts = this.performFilter(value);
   }
 
   toggleImage(): void {
