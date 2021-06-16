@@ -1,5 +1,5 @@
 import { IProduct, ProductListResolved } from './../iproduct';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
@@ -14,16 +14,8 @@ export class ProductListComponent implements OnInit {
   imageMargin: number = 2;
   showImage: boolean = false;
   errorMessage = '';
-  sub!: Subscription;
-
-  private _listFilter: string = '';
-  get listFilter(): string {
-    return this._listFilter;
-  }
-  set listFilter(value: string) {
-    this.filteredProducts = this.performFilter(value);
-    this._listFilter = value;
-  }
+  includeDetail: boolean = true;
+  sub!: Subscription; // hold the supcription, using to check is we subcribe element or not, if yes don't supcribe again
 
   products: IProduct[] = [];
   filteredProducts: IProduct[] = this.products;

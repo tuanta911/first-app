@@ -1,5 +1,6 @@
+import { NgForm } from '@angular/forms';
 import { ProductService } from './../product.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IProduct, ProductResolved } from '../iproduct';
 
@@ -13,6 +14,8 @@ export class ProductEditComponent implements OnInit {
   private currentProduct?: IProduct;
   private originalProduct?: IProduct;
 
+  @ViewChild(NgForm) editFrom: NgForm | undefined;
+
   get product(): IProduct {
     return this.currentProduct == undefined
       ? this.productService.IntProduct()
@@ -25,13 +28,16 @@ export class ProductEditComponent implements OnInit {
   }
 
   get isDirty(): boolean {
-    console.log(this.originalProduct);
-    console.log(this.currentProduct);
+    if (this.editFrom == undefined) {
+      return false;
+    } else {
+      return this.editFrom.dirty ? true : false;
+    }
 
-    return (
-      JSON.stringify(this.originalProduct) !=
-      JSON.stringify(this.currentProduct)
-    );
+    // return (
+    //   JSON.stringify(this.originalProduct) !=
+    //   JSON.stringify(this.currentProduct)
+    // );
   }
 
   errorMessage?: string;

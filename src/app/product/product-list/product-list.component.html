@@ -4,11 +4,13 @@
   </div>
   <div class="card-body">
     <div class="row">
-      <div class="col-md-2">Filter by:</div>
-      <div class="col-md-4">
-        <input type="text" [(ngModel)]="listFilter" />
-      </div>
+      <app-criteria
+        class="col-md-10"
+        [displayDetail]="includeDetail"
+        [hitCount]="filteredProducts.length"
+      ></app-criteria>
     </div>
+
     <div class="table-responsive">
       <table class="table" *ngIf="products.length">
         <thead>
