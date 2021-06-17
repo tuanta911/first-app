@@ -1,15 +1,17 @@
 import { IProduct } from './../iproduct';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProductService } from '../product.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-shell-detail',
   templateUrl: './product-shell-detail.component.html',
   styleUrls: ['./product-shell-detail.component.css'],
 })
-export class ProductShellDetailComponent implements OnInit {
+export class ProductShellDetailComponent implements OnInit, OnDestroy {
   errorMessage: string = '';
-  private _product: IProduct = {
+  sub: Subscription | undefined;
+  product: IProduct = {
     id: 0,
     productName: '',
     productCode: '',
@@ -21,17 +23,21 @@ export class ProductShellDetailComponent implements OnInit {
     Category: '',
   };
 
-  get product(): IProduct {
-    if (this.productService.currentProduct != undefined) {
-      return this.productService.currentProduct;
-    }
-    return this._product;
-  }
-  set product(value: IProduct) {
-    this._product = value;
-  }
-
   constructor(private productService: ProductService) {}
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.sub == undefined) {
+      this.sub = this.productService.selectedProductSource$.subscribe(
+        (selectedProduct) => {
+          if (selectedProduct) {
+            this.product = selectedProduct;
+            console.log(selectedProduct);
+          }
+        }
+      );
+    }
+  }
 }

@@ -5,7 +5,7 @@ import {
   HttpErrorResponse,
   HttpHeaders,
 } from '@angular/common/http';
-import { Observable, throwError, of } from 'rxjs';
+import { Observable, throwError, of, Subject, BehaviorSubject } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 @Injectable({
@@ -15,9 +15,16 @@ export class ProductService {
   private productURL = 'api/products';
   private idCounter: number = 11;
   private listProduct: IProduct[] = [];
-  currentProduct: IProduct | undefined;
+  private selectedProductSource = new BehaviorSubject<IProduct | undefined>(
+    undefined
+  );
+  selectedProductSource$ = this.selectedProductSource.asObservable();
 
   constructor(private http: HttpClient) {}
+
+  changeSelectedProduct(selectedProduct: IProduct) {
+    this.selectedProductSource.next(selectedProduct);
+  }
 
   IntProduct(): IProduct {
     return {
@@ -81,6 +88,7 @@ export class ProductService {
       tap((data) => {
         console.log('createProduct: ' + JSON.stringify(data));
         this.listProduct.push(data);
+        this.selectedProductSource.next(data);
       }),
 
       catchError(this.handleError)
@@ -96,9 +104,9 @@ export class ProductService {
         this.listProduct.forEach((value, index) => {
           if (value.id == id) {
             this.listProduct.splice(index, 1);
-            this.currentProduct = undefined;
           }
         });
+        this.selectedProductSource.next(undefined);
       }),
       catchError(this.handleError)
     );
