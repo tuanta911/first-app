@@ -1,3 +1,4 @@
+import { ProductService } from './../product.service';
 import { ProductParameterService } from './../product-parameter.service';
 import { CriteriaComponent } from './../../shared/criteria/criteria.component';
 import { IProduct, ProductListResolved } from './../iproduct';
@@ -37,7 +38,8 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private route: ActivatedRoute,
-    private productParameterService: ProductParameterService
+    private productParameterService: ProductParameterService,
+    private productService: ProductService
   ) {}
 
   ngAfterViewInit(): void {
