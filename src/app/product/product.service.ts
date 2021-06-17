@@ -15,6 +15,7 @@ export class ProductService {
   private productURL = 'api/products';
   private idCounter: number = 11;
   private listProduct: IProduct[] = [];
+  currentProduct: IProduct | undefined;
 
   constructor(private http: HttpClient) {}
 
@@ -95,6 +96,7 @@ export class ProductService {
         this.listProduct.forEach((value, index) => {
           if (value.id == id) {
             this.listProduct.splice(index, 1);
+            this.currentProduct = undefined;
           }
         });
       }),

@@ -12,6 +12,9 @@ import { ProductResolver } from './product-resolver.service';
 import { ProductEditComponent } from './product-edit/product-edit.component';
 import { ProductEditTagsComponent } from './product-edit/product-edit-tags/product-edit-tags.component';
 import { ProductEditInfoComponent } from './product-edit/product-edit-info/product-edit-info.component';
+import { ProductShellComponent } from './product-shell/product-shell.component';
+import { ProductShellListComponent } from './product-shell/product-shell-list.component';
+import { ProductShellDetailComponent } from './product-shell/product-shell-detail.component';
 
 @NgModule({
   declarations: [
@@ -20,13 +23,17 @@ import { ProductEditInfoComponent } from './product-edit/product-edit-info/produ
     ProductEditComponent,
     ProductEditTagsComponent,
     ProductEditInfoComponent,
+    ProductShellComponent,
+    ProductShellListComponent,
+    ProductShellDetailComponent,
   ],
   imports: [
     FormsModule,
+    ShareModule,
     RouterModule.forChild([
       {
         path: '',
-        component: ProductListComponent,
+        component: ProductShellComponent,
         resolve: { resolveData: ProductListResolverService },
       },
       {
@@ -54,7 +61,6 @@ import { ProductEditInfoComponent } from './product-edit/product-edit-info/produ
         ],
       },
     ]),
-    ShareModule,
   ],
   providers: [ProductParameterService],
 })
